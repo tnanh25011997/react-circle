@@ -1,8 +1,6 @@
-version: "3.3"
+version: "3"
 services:
   mywebsite:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: cityhunter25197/react-docker:latest
     ports:
       - "9000:80"
