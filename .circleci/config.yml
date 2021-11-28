@@ -1,0 +1,55 @@
+# my config
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  docker: circleci/docker@1.4.0
+
+jobs:
+  build-and-push:
+    environment:
+      DOCKER_IMAGE: anhtn/react-docker
+      DOCKER_TAG: latest
+      SSH_KEY_FINGERPRINT: 5f:9e:47:88:35:01:ab:5f:50:d6:f1:b8:a9:69:10:23
+      DEPLOYED_USER: ec2-user
+      DEPLOYED_SERVER: 34.237.81.161
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check:
+          docker-username: DOCKER_USER
+          docker-password: DOCKER_PASSWORD
+      - docker/build:
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  deploy:
+    executor: docker/docker
+    steps:
+      # Please add $SSH_KEY_FINGERPRINT, $DEPLOYED_USER@ and DEPLOYED_SERVER to project's environment
+      - add_ssh_keys:
+          fingerprints:
+            - $SSH_KEY_FINGERPRINT
+      - run: ssh -oStrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER './deploy.sh'
+
+workflows:
+  my-pipeline:
+    jobs:
+      - node/test
+      - build-and-push:
+          requires:
+            - node/test
+          filters:
+            branches:
+              only:
+                - develop
+      # uncomment the 3 following lines to enable deploying
+      - deploy:
+          requires:
+            - build-and-push
