@@ -17,19 +17,25 @@ jobs:
       - setup_remote_docker
       - checkout
       - docker/check:
-          docker-username: DOCKER_USER
-          docker-password: DOCKER_PASSWORD
+          docker-username: 123
+          docker-password: 123
       - docker/build:
-          image: anhtn/react-docker
-          tag: latest
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
       - docker/push:
           digest-path: /tmp/digest.txt
-          image: anhtn/react-docker
-          tag: latest
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
   deploy:
+    environment:
+      DOCKER_IMAGE: anhtn/react-docker
+      DOCKER_TAG: latest
+      SSH_KEY_FINGERPRINT: 5f:9e:47:88:35:01:ab:5f:50:d6:f1:b8:a9:69:10:23
+      DEPLOYED_USER: ec2-user
+      DEPLOYED_SERVER: 34.237.81.161
     executor: docker/docker
     steps:
       # Please add $SSH_KEY_FINGERPRINT, $DEPLOYED_USER@ and DEPLOYED_SERVER to project's environment
