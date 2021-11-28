@@ -7,11 +7,8 @@ orbs:
 jobs:
   build-and-push:
     environment:
-      DOCKER_IMAGE: anhtn/react-docker
+      DOCKER_IMAGE: cityhunter25197/react-docker
       DOCKER_TAG: latest
-      SSH_KEY_FINGERPRINT: 5f:9e:47:88:35:01:ab:5f:50:d6:f1:b8:a9:69:10:23
-      DEPLOYED_USER: ec2-user
-      DEPLOYED_SERVER: 34.237.81.161
     executor: docker/docker
     steps:
       - setup_remote_docker
@@ -31,8 +28,6 @@ jobs:
             echo "Digest is: $(</tmp/digest.txt)"
   deploy:
     environment:
-      DOCKER_IMAGE: anhtn/react-docker
-      DOCKER_TAG: latest
       SSH_KEY_FINGERPRINT: 5f:9e:47:88:35:01:ab:5f:50:d6:f1:b8:a9:69:10:23
       DEPLOYED_USER: ec2-user
       DEPLOYED_SERVER: 34.237.81.161
