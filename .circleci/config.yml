@@ -20,12 +20,12 @@ jobs:
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASSWORD
       - docker/build:
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
+          image: anhtn/react-docker
+          tag: latest
       - docker/push:
           digest-path: /tmp/digest.txt
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
+          image: anhtn/react-docker
+          tag: latest
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
