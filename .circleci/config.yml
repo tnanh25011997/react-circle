@@ -37,7 +37,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_KEY_FINGERPRINT
-      - run: ssh -o StrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER "cd /home/ec2-user/react-circle; mkdir blo; ./deploy.sh"
+      - run: ssh -o StrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER "cd /home/ec2-user/react-circle; ./deploy.sh;"
 
 workflows:
   my-pipeline:
